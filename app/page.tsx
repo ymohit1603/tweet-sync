@@ -1,13 +1,12 @@
-"use client"
+"use client";
 
-// import { useState } from "react"
-import { motion } from "framer-motion"
-import { ArrowRight,  Linkedin, Play } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import XIcon from '@mui/icons-material/X';
+import { motion } from "framer-motion";
+import { ArrowRight, Linkedin, Play, X as XIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { SignInButton, SignUpButton,SignedOut,SignedIn, SignOutButton } from "@clerk/nextjs";
+import Link from "next/link";
 
 export default function TweetSyncLanding() {
-  // const [isHovered, setIsHovered] = useState(false)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 overflow-hidden">
@@ -26,9 +25,7 @@ export default function TweetSyncLanding() {
           transition={{ duration: 0.5 }}
           className="flex items-center space-x-2"
         >
-          <XIcon className="h-5 w-5 text-blue-500" />
-          
-          
+          <XIcon className="h-5 w-5 text-blue-600" />
           <span className="font-bold text-xl bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
             TweetSync
           </span>
@@ -40,50 +37,54 @@ export default function TweetSyncLanding() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">
+            <Link href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">
               Features
-            </a>
+            </Link>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <a href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">
+            <Link href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">
               Pricing
-            </a>
+            </Link>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <a href="#testimonials" className="text-gray-600 hover:text-gray-900 transition-colors">
+            <Link href="#testimonials" className="text-gray-600 hover:text-gray-900 transition-colors">
               Testimonials
-            </a>
+            </Link>
           </motion.div>
-
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <a href="/dashboard" className="text-gray-600 hover:text-gray-900 transition-colors">
+            <Link href="/dashboard" className="text-gray-600 hover:text-gray-900 transition-colors">
               Dashboard
-            </a>
+            </Link>
           </motion.div>
         </nav>
 
+        <SignedOut>
         <div className="flex items-center space-x-4">
+
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.4 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <a href="/login" className="text-gray-600 hover:text-gray-900 transition-colors">
-              Login
-            </a>
+            <div className="px-6 py-2 text-white bg-gray-900 rounded-lg shadow-md transition-all duration-300 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">
+              <SignInButton />
+            </div>
           </motion.div>
+
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -91,11 +92,25 @@ export default function TweetSyncLanding() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium rounded-full px-6">
-              Sign Up
-            </Button>
+            <div className="px-6 py-2 text-white bg-blue-600 rounded-lg shadow-md transition-all duration-300 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <SignUpButton />
+            </div>
           </motion.div>
         </div>
+        </SignedOut>
+        <SignedIn>
+        <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <div onClick={()=>{}} className="px-6 py-2 text-white bg-blue-600 rounded-lg shadow-md transition-all duration-300 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <SignOutButton />
+            </div>
+          </motion.div>
+        </SignedIn>
       </header>
 
       {/* Hero Section */}
@@ -106,8 +121,7 @@ export default function TweetSyncLanding() {
           transition={{ duration: 0.7 }}
           className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-500 to-indigo-600 bg-clip-text text-transparent"
         >
-          Sync Your Tweets to LinkedIn –
-          <br /> Instantly & Effortlessly
+          Sync Your Tweets to LinkedIn –<br /> Instantly & Effortlessly
         </motion.h1>
 
         <motion.p
@@ -127,9 +141,12 @@ export default function TweetSyncLanding() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium rounded-full px-8 py-6 w-full sm:w-auto">
+            <Link
+              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-medium rounded-full px-8 py-6 w-full sm:w-auto"
+              href="/dashboard"
+            >
               Get Started for Free
-            </Button>
+            </Link>
           </motion.div>
 
           <motion.div
@@ -156,14 +173,17 @@ export default function TweetSyncLanding() {
           className="relative max-w-2xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl"
         >
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
-            <motion.div whileHover={{ scale: 1.05 }} className="bg-gray-800 rounded-xl p-4 shadow-lg">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="bg-gray-800 rounded-xl p-4 shadow-lg"
+            >
               <div className="flex items-center mb-2">
                 <XIcon className="h-5 w-5 text-blue-400 mr-2" />
                 <span className="text-white font-medium">Tweet Preview</span>
               </div>
               <div className="bg-gray-700 rounded-lg p-3 text-white text-sm text-left">
-                Just published a new blog post about social media synergy! Check it out on our website. #SocialMedia
-                #Marketing
+                Just published a new blog post about social media synergy! Check it out on our website.
+                #SocialMedia #Marketing
               </div>
             </motion.div>
 
@@ -181,20 +201,22 @@ export default function TweetSyncLanding() {
               <ArrowRight className="h-8 w-8 text-purple-500" />
             </motion.div>
 
-            <motion.div whileHover={{ scale: 1.05 }} className="bg-blue-800 rounded-xl p-4 shadow-lg">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="bg-blue-800 rounded-xl p-4 shadow-lg"
+            >
               <div className="flex items-center mb-2">
                 <Linkedin className="h-5 w-5 text-blue-300 mr-2" />
                 <span className="text-white font-medium">LinkedIn Post</span>
               </div>
               <div className="bg-blue-700 rounded-lg p-3 text-white text-sm text-left">
-                Just published a new blog post about social media synergy! Check it out on our website. #SocialMedia
-                #Marketing
+                Just published a new blog post about social media synergy! Check it out on our website.
+                #SocialMedia #Marketing
               </div>
             </motion.div>
           </div>
         </motion.div>
       </main>
     </div>
-  )
+  );
 }
-
