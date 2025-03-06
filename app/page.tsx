@@ -1,11 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Linkedin, Play, X as XIcon } from "lucide-react";
+import { ArrowRight, Linkedin, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SignInButton, SignUpButton,SignedOut,SignedIn, SignOutButton } from "@clerk/nextjs";
 import Link from "next/link";
-
+import XIcon from '@mui/icons-material/X';
 export default function TweetSyncLanding() {
 
   return (
