@@ -6,10 +6,13 @@ import { Button } from "@/components/ui/button";
 import { SignInButton, SignUpButton,SignedOut,SignedIn, SignOutButton } from "@clerk/nextjs";
 import Link from "next/link";
 import XIcon from '@mui/icons-material/X';
+import Pricing from "@/components/pricing";
+import Footer from "@/components/footer";
+import FeaturesSection from "@/components/features";
 export default function TweetSyncLanding() {
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 ">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -left-40 w-80 h-80 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
@@ -27,7 +30,7 @@ export default function TweetSyncLanding() {
         >
           <XIcon className="h-5 w-5 text-blue-600" />
           <span className="font-bold text-xl bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-            TweetSync
+            Tweet-Sync
           </span>
         </motion.div>
 
@@ -37,7 +40,7 @@ export default function TweetSyncLanding() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <Link href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">
+            <Link href="#features" className="text-gray-600 hover:text-gray-900 transition-colors scroll-smooth">
               Features
             </Link>
           </motion.div>
@@ -46,7 +49,7 @@ export default function TweetSyncLanding() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <Link href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">
+            <Link href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors scroll-smooth">
               Pricing
             </Link>
           </motion.div>
@@ -55,8 +58,8 @@ export default function TweetSyncLanding() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <Link href="#testimonials" className="text-gray-600 hover:text-gray-900 transition-colors">
-              Testimonials
+            <Link href="#demo" className="text-gray-600 hover:text-gray-900 transition-colors scroll-smooth">
+              Demo
             </Link>
           </motion.div>
           <motion.div
@@ -114,7 +117,7 @@ export default function TweetSyncLanding() {
       </header>
 
       {/* Hero Section */}
-      <main className="relative z-10 container mx-auto px-4 pt-16 pb-24 text-center">
+      <main className="relative z-10 container mx-auto px-4 pt-16 pb-4 text-center">
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -217,6 +220,9 @@ export default function TweetSyncLanding() {
           </div>
         </motion.div>
       </main>
+      <FeaturesSection/>
+      <Pricing/>
+      <Footer/>
     </div>
   );
 }

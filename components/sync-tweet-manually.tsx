@@ -10,7 +10,7 @@ interface Tweet {
   created_at: string;
 }
 
-const TweetSync = () => {
+const Tweet-Sync = () => {
   const [tweets, setTweets] = useState<Tweet[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -60,4 +60,4 @@ const TweetSync = () => {
   );
 };
 
-export default TweetSync;
+export default Tweet-Sync;

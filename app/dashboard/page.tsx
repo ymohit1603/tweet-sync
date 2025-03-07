@@ -26,7 +26,7 @@ export default function Dashboard() {
           
           
           <span className="font-bold text-xl bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-            TweetSync
+            Tweet-Sync
           </span>
           </div>
         </div>
@@ -71,11 +71,11 @@ export default function Dashboard() {
           
           
           <span className="font-bold text-xl bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-            TweetSync
+            Tweet-Sync
           </span>
               </div>
             </div>
-            <h1 className="text-xl font-semibold text-center mb-2">Welcome to TweetSync</h1>
+            <h1 className="text-xl font-semibold text-center mb-2">Welcome to Tweet-Sync</h1>
             <p className="text-gray-600 text-center text-sm mb-6">Sync your tweets to create awesomely</p>
 
             <div className="space-y-3">

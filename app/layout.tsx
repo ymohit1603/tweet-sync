@@ -7,7 +7,7 @@ import { ClerkProvider } from "@clerk/nextjs"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "TweetSync - Sync your social media content",
+  title: "Tweet-Sync - Sync your social media content",
   description: "Sync your tweets to create awesomely across platforms",
 }
 
