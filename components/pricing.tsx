@@ -15,6 +15,8 @@ export default function PricingSection() {
     }
   };
 
+
+
   return (
     <div id="pricing" className="container mx-auto px-4 py-16 max-w-6xl">
       {/* Pricing Header */}
@@ -49,7 +51,7 @@ export default function PricingSection() {
             <FeatureItem text="Unlimited single-threaded tweets" />
             <FeatureItem text="Post as it is" />
           </div>
-          <Button variant="outline" className="w-full" onClick={() => handleCheckout("pri_01jnqpa3hc7f0ae7gns126jd52")}>
+          <Button variant="outline" className="w-full" onClick={() => handleCheckout("pri_01jnqwqhfz4th0bgzk5hecy854")}>
             Get Started
           </Button>
         </motion.div>
@@ -74,7 +76,7 @@ export default function PricingSection() {
             <FeatureItem text="AI-powered modifications" />
             <FeatureItem text="Multiple threaded posts" />
           </div>
-          <Button className="w-full bg-white text-black hover:bg-gray-200" onClick={() => handleCheckout("pri_01jnqpa3hc7f0ae7gns126jd52")}>
+          <Button className="w-full bg-white text-black hover:bg-gray-200" onClick={() => handleCheckout("pri_01jnqwqx6jk8a91vhbyc15zgrb")}>
             Get Started
           </Button>
         </motion.div>
@@ -99,7 +101,7 @@ export default function PricingSection() {
             <FeatureItem text="Basic and Pro features" />
             <FeatureItem text="Dedicated support" />
           </div>
-          <Button variant="outline" className="w-full" onClick={() => handleCheckout("pri_01jnqpbftt3wp5317gpbjmsjs5")}>
+          <Button variant="outline" className="w-full" onClick={() => handleCheckout("pri_01jnqwrajbazagn3622bt5w0qn")}>
             Get Started
           </Button>
         </motion.div>
