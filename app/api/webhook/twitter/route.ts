@@ -1,29 +1,36 @@
 import { NextResponse } from "next/server";
-import { db } from "@/server/db";
+import { db } from "@/server/db"; // adjust this import to your actual DB client
 import { Queue } from "bullmq";
-import { Redis } from "@upstash/redis";
+import IORedis from "ioredis";
 
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+// Create Redis connection using ioredis
+const redisConnection = new IORedis({
+  host: process.env.REDIS_HOST,
+  port: Number(process.env.REDIS_PORT || 6379),
+  password: process.env.REDIS_PASSWORD,
 });
 
-// const syncQueue = new Queue("sync-queue", {
-//   // connection: redis,
-// });
+// Initialize BullMQ queue with Redis connection
+const syncQueue = new Queue("sync-queue", {
+  connection: redisConnection,
+});
 
+// Next.js POST endpoint for Twitter webhooks
 export async function POST(request: Request) {
   try {
-    const signature = await request.headers.get("x-twitter-webhooks-signature");
-    
+    // Read the raw text for signature verification
+    const body = await request.text();
+    const signature = request.headers.get("x-twitter-webhooks-signature");
+
     // Verify webhook signature
-    if (!signature || !verifySignature(signature, await request.text())) {
+    if (!signature || !verifySignature(signature, body)) {
       return new NextResponse("Invalid signature", { status: 401 });
     }
 
-    const payload = await request.json();
-    
-    // Extract tweet data
+    // Parse the JSON payload
+    const payload = JSON.parse(body);
+
+    // Extract tweet data (adjust structure based on Twitter's webhook payload)
     const {
       user_id: twitterId,
       id_str: tweetId,
@@ -40,12 +47,12 @@ export async function POST(request: Request) {
       return new NextResponse("User not found", { status: 404 });
     }
 
-    // Check user settings
+    // Check if auto-sync is enabled for the user
     if (!user.settings?.autoSync) {
       return new NextResponse("Auto-sync disabled", { status: 200 });
     }
 
-    // Create sync history record
+    // Create sync history record in your database
     const syncHistory = await db.syncHistory.create({
       data: {
         userId: user.id,
@@ -55,7 +62,7 @@ export async function POST(request: Request) {
       },
     });
 
-    // Add to sync queue
+    // Add the tweet to the BullMQ sync queue for background processing
     await syncQueue.add(
       "sync-tweet",
       {
@@ -81,9 +88,17 @@ export async function POST(request: Request) {
   }
 }
 
-// Verify Twitter webhook signature
+// Placeholder for Twitter webhook signature verification.
+// Replace with actual HMAC-SHA256 logic using your TWITTER_CONSUMER_SECRET as the key.
+// See: https://developer.twitter.com/en/docs/twitter-api/enterprise/account-activity-api/guides/securing-webhooks
 function verifySignature(signature: string, body: string): boolean {
-  // Implement signature verification logic
-  // This is a placeholder - you'll need to implement the actual verification
+  // Example implementation:
+  // import crypto from 'crypto';
+  // const hash = crypto.createHmac('sha256', process.env.TWITTER_CONSUMER_SECRET!)
+  //                   .update(body)
+  //                   .digest('base64');
+  // return signature === `sha256=${hash}`;
+
+  // For now, always return true for demo purposes.
   return true;
-} 
+}
