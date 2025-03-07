@@ -91,6 +91,7 @@ export async function POST(request: Request) {
 // Placeholder for Twitter webhook signature verification.
 // Replace with actual HMAC-SHA256 logic using your TWITTER_CONSUMER_SECRET as the key.
 // See: https://developer.twitter.com/en/docs/twitter-api/enterprise/account-activity-api/guides/securing-webhooks
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function verifySignature(signature: string, body: string): boolean {
   // Example implementation:
   // import crypto from 'crypto';
