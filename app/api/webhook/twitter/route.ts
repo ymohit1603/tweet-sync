@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/server/db"; // adjust this import to your actual DB client
 import { Queue } from "bullmq";
 import IORedis from "ioredis";
+import crypto from "crypto";
 
 // Create Redis connection using ioredis
 const redisConnection = new IORedis({
@@ -88,18 +89,11 @@ export async function POST(request: Request) {
   }
 }
 
-// Placeholder for Twitter webhook signature verification.
-// Replace with actual HMAC-SHA256 logic using your TWITTER_CONSUMER_SECRET as the key.
-// See: https://developer.twitter.com/en/docs/twitter-api/enterprise/account-activity-api/guides/securing-webhooks
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function verifySignature(signature: string, body: string): boolean {
-  // Example implementation:
-  // import crypto from 'crypto';
-  // const hash = crypto.createHmac('sha256', process.env.TWITTER_CONSUMER_SECRET!)
-  //                   .update(body)
-  //                   .digest('base64');
-  // return signature === `sha256=${hash}`;
-
-  // For now, always return true for demo purposes.
-  return true;
+  // Verify the signature using your Twitter consumer secret
+  const hash = crypto
+    .createHmac("sha256", process.env.TWITTER_CONSUMER_SECRET!)
+    .update(body)
+    .digest("base64");
+  return signature === `sha256=${hash}`;
 }

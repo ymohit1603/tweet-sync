@@ -1,66 +1,42 @@
-import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { db } from "@/server/db";
 
 export async function GET(request: Request) {
   try {
-    // Retrieve the authenticated user's ID from Clerk
-    const { userId } = await auth();
     const { searchParams } = new URL(request.url);
-    const code = searchParams.get("code");
+    const username = searchParams.get("username");
 
-    // If no user or code exists, redirect back to dashboard
-    if (!userId || !code) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
+    if (!username) {
+      return NextResponse.json({ error: "Username is required" }, { status: 400 });
     }
 
-    // Set up your Twitter OAuth credentials from environment variables
-    const clientId = process.env.TWITTER_CLIENT_ID as string;
-    const clientSecret = process.env.TWITTER_CLIENT_SECRET as string;
-    const redirectUri = process.env.TWITTER_REDIRECT_URI as string;
-    const codeVerifier = process.env.TWITTER_CODE_VERIFIER as string; // Only if you're using PKCE
+    // Twitter Bearer Token (ensure it's set in your environment variables)
+    const bearerToken = process.env.TWITTER_BEARER_TOKEN as string;
 
-    // Exchange the authorization code for an access token from Twitter
-    const tokenResponse = await fetch("https://api.twitter.com/2/oauth2/token", {
-      method: "POST",
+    if (!bearerToken) {
+      return NextResponse.json({ error: "Missing Twitter API credentials" }, { status: 500 });
+    }
+
+    // Fetch user ID from Twitter API
+    const response = await fetch(`https://api.twitter.com/2/users/by/username/${username}`, {
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        // Basic auth header is created by base64 encoding clientId:clientSecret
-        "Authorization": "Basic " + Buffer.from(`${clientId}:${clientSecret}`).toString("base64"),
+        Authorization: `Bearer ${bearerToken}`,
       },
-      body: new URLSearchParams({
-        code,
-        grant_type: "authorization_code",
-        client_id: clientId,
-        redirect_uri: redirectUri,
-        code_verifier: codeVerifier, // Remove if not using PKCE
-      }),
     });
 
-    if (!tokenResponse.ok) {
-      throw new Error("Failed to fetch token from Twitter");
+    if (!response.ok) {
+      throw new Error(`Twitter API Error: ${response.statusText}`);
     }
 
-    const tokenData = await tokenResponse.json();
+    const data = await response.json();
+    const twitterId = data.data?.id;
 
-    // Extract Twitter access token and user ID from the response
-    const twitterToken = tokenData.access_token;
-    const twitterId = tokenData.user_id; // Verify the key names with Twitter's docs
+    if (!twitterId) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
 
-    // Update the user's record in your database with Twitter credentials
-    await db.user.update({
-      where: { id: userId },
-      data: {
-        twitterId,
-        twitterToken,
-      },
-    });
-
-    // Redirect the user back to their dashboard after successful authentication
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return NextResponse.json({ twitterId });
   } catch (error) {
-    console.error("Twitter OAuth Error:", error);
-    // Redirect with an error flag in the query string
-    return NextResponse.redirect(new URL("/dashboard?error=twitter_auth_failed", request.url));
+    console.error("Error fetching Twitter ID:", error);
+    return NextResponse.json({ error: "Failed to fetch Twitter ID" }, { status: 500 });
   }
 }
