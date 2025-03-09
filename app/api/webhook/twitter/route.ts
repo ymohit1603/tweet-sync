@@ -97,3 +97,4 @@ function verifySignature(signature: string, body: string): boolean {
     .digest("base64");
   return signature === `sha256=${hash}`;
 }
+
